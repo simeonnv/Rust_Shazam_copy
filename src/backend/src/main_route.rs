@@ -1,6 +1,5 @@
-use actix_web::{post, web, Result};
+use actix_web::{Result, post, web};
 use serde::Deserialize;
-
 
 #[derive(Deserialize)]
 struct Req {
@@ -9,8 +8,5 @@ struct Req {
 
 #[post("")]
 pub async fn main_route(req: web::Json<Req>) -> Result<String> {
-
-
     Ok(format!("File: {:?}!", req.input_file))
-
 }
