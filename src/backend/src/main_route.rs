@@ -1,12 +1,6 @@
-use actix_web::{Result, post, web};
-use serde::Deserialize;
+use actix_web::{HttpResponse, Responder, post, web};
 
-#[derive(Deserialize)]
-struct Req {
-    input_file: Vec<u8>,
-}
-
-#[post("")]
-pub async fn main_route(req: web::Json<Req>) -> Result<String> {
-    Ok(format!("File: {:?}!", req.input_file))
+#[post("/")]
+pub async fn main_route(blob: web::Bytes) -> impl Responder {
+    HttpResponse::Ok().content_type("audio/wav").body(blob)
 }
