@@ -1,7 +1,12 @@
 use actix_cors::Cors;
 use actix_web::{App, HttpServer, http, middleware::Logger};
 use env_logger::Env;
-pub mod main_route;
+use utoipa::OpenApi;
+use utoipa_swagger_ui::SwaggerUi;
+
+pub mod api_docs;
+pub mod error;
+pub mod routes;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -18,7 +23,11 @@ async fn main() -> std::io::Result<()> {
             )
             .wrap(Logger::default())
             .wrap(Logger::new("%a %{User-Agent}i"))
-            .service(main_route::main_route)
+            .service(routes::songs::songs())
+            .service(
+                SwaggerUi::new("/{_:.*}")
+                    .url("/api-docs/openapi.json", api_docs::ApiDoc::openapi()),
+            )
     })
     .bind(("127.0.0.1", 8080))?
     .run()
