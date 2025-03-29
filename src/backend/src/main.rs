@@ -7,6 +7,7 @@ use utoipa_swagger_ui::SwaggerUi;
 pub mod api_docs;
 pub mod error;
 pub mod routes;
+pub mod utils;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -29,7 +30,7 @@ async fn main() -> std::io::Result<()> {
                     .url("/api-docs/openapi.json", api_docs::ApiDoc::openapi()),
             )
     })
-    .bind(("127.0.0.1", 8080))?
+    .bind(("127.0.0.1", 8888))?
     .run()
     .await
 }

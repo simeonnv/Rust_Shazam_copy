@@ -85,15 +85,3 @@ impl<T> From<PoisonError<T>> for Error {
         Error::Internal(format!("Multithread error, POISONED: {}", err))
     }
 }
-
-impl From<rustube::Error> for Error {
-    fn from(err: rustube::Error) -> Self {
-        Error::Internal(format!("URL parsing error: {}", err))
-    }
-}
-
-impl From<rustube::url::ParseError> for Error {
-    fn from(err: rustube::url::ParseError) -> Self {
-        Error::Internal(format!("URL parsing error: {}", err))
-    }
-}
