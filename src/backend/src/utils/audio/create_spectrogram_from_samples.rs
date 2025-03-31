@@ -17,7 +17,7 @@ pub async fn create_spectrogram_from_samples(
     let reduced_samples = reduce_audio_sample_rate(
         filtered_samples,
         FREQ_BIN_SIZE as i32,
-        (wav.sample_rate / 4).try_into().unwrap(),
+        (wav.sample_rate / 4) as i32,
     )?;
 
     let num_of_windows = reduced_samples.len() / (FREQ_BIN_SIZE - HOP_SIZE);
