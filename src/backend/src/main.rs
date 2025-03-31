@@ -1,6 +1,9 @@
 use actix_cors::Cors;
 use actix_web::{App, HttpServer, http, middleware::Logger};
 use env_logger::Env;
+use sqlx::{Pool, Sqlite};
+use tokio::sync::OnceCell;
+use utils::db::init::{init_pool::init_pool, init_tables::init_tables};
 use utoipa::OpenApi;
 use utoipa_swagger_ui::SwaggerUi;
 
@@ -9,9 +12,14 @@ pub mod error;
 pub mod routes;
 pub mod utils;
 
+static DB: OnceCell<Pool<Sqlite>> = OnceCell::const_new();
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     env_logger::init_from_env(Env::default().default_filter_or("info"));
+
+    init_pool().await.expect("failed initing database and pool");
+    init_tables().await.expect("failed to init tables");
 
     HttpServer::new(|| {
         App::new()

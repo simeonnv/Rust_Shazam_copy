@@ -1,20 +1,18 @@
 use num_complex::Complex;
 
+use super::convert_yt_audio_to_wav::Wav;
+
 #[derive(Debug)]
 pub struct Peak {
-    time: f64,
-    freq: Complex<f64>,
+    pub time: f64,
+    pub freq: Complex<f64>,
 }
 
-pub fn extract_peaks_from_spectrogram(
-    spectrogram: Vec<Vec<Complex<f64>>>,
-    audio_duration: f64,
-) -> Vec<Peak> {
+pub fn extract_peaks_from_spectrogram(spectrogram: Vec<Vec<Complex<f64>>>, wav: &Wav) -> Vec<Peak> {
     if spectrogram.is_empty() {
         return Vec::new();
     }
 
-    // Define the maxies struct
     #[derive(Debug)]
     struct Maxies {
         max_mag: f64,
@@ -22,11 +20,10 @@ pub fn extract_peaks_from_spectrogram(
         freq_idx: usize,
     }
 
-    // Define frequency bands
     let bands = vec![(0, 10), (10, 20), (20, 40), (40, 80), (80, 160), (160, 512)];
 
     let mut peaks = Vec::new();
-    let bin_duration = audio_duration / spectrogram.len() as f64;
+    let bin_duration = wav.duration / spectrogram.len() as f64;
 
     for (bin_idx, bin) in spectrogram.iter().enumerate() {
         let mut max_mags = Vec::new();

@@ -1,7 +1,7 @@
 use super::convert_yt_audio_to_wav::Wav;
 use crate::error::Error;
 
-pub fn wav_bytes_to_samples(wav_bytes: &Wav) -> Result<Vec<f64>, Error> {
+pub fn sample_wav_audio(wav_bytes: &Wav) -> Result<Vec<f64>, Error> {
     let wav_bytes = &wav_bytes.raw_bytes;
 
     if wav_bytes.len() % 2 != 0 {

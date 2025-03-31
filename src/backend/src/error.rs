@@ -1,7 +1,8 @@
-use std::{fmt, sync::PoisonError};
-
 use actix_web::{HttpResponse, ResponseError};
 use serde::{Deserialize, Serialize};
+use sqlx;
+use std::{fmt, sync::PoisonError};
+use tokio::task::JoinError;
 
 #[derive(Serialize, Deserialize)]
 pub struct ErrorRes {
@@ -83,5 +84,11 @@ impl From<sqlx::Error> for Error {
 impl<T> From<PoisonError<T>> for Error {
     fn from(err: PoisonError<T>) -> Self {
         Error::Internal(format!("Multithread error, POISONED: {}", err))
+    }
+}
+
+impl From<JoinError> for Error {
+    fn from(err: JoinError) -> Self {
+        Error::Internal(format!("Task join error: {}", err))
     }
 }
