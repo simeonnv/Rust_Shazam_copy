@@ -3,7 +3,16 @@ use rusty_ytdl::Video;
 use serde::Deserialize;
 use utoipa::ToSchema;
 
-use crate::error::Error;
+use crate::{
+    error::Error,
+    utils::{
+        audio::{
+            parse_wav_bytes_into_wav_struct::convert_yt_audio_to_wav,
+            proccess_wav_into_db::proccess_wav_into_db,
+        },
+        youtube::{get_youtube_audio::get_youtube_audio, get_youtube_info::get_youtube_info},
+    },
+};
 
 #[derive(Deserialize, ToSchema)]
 pub struct Req {
@@ -19,20 +28,14 @@ pub struct Req {
 )]
 #[post("")]
 pub async fn post_songs(req: web::Json<Req>) -> Result<HttpResponse, Error> {
-    let video_url = "https://www.youtube.com/watch?v=FZ8BxMU3BYc";
-    let video = Video::new(video_url).unwrap(); // Convert error to custom Error type
+    let url = req.url.clone();
 
-    let stream = video.stream().await.unwrap();
+    let yt_info = get_youtube_info(&url).await?;
+    let raw_yt_audio = get_youtube_audio(&url).await?;
 
-    // Collect chunks into a String
-    // while let Some(chunk) = stream.chunk().await.unwrap() {
-    //     println!("{:#?}", chunk);
-    // }
+    let wav = convert_yt_audio_to_wav(raw_yt_audio).await?;
 
-    // Optional: Get video info if needed
-    let video_info = video.get_info().await.unwrap();
-    dbg!(video_info);
+    proccess_wav_into_db(&wav, &yt_info).await?;
 
-    // Return the collected string in the response
     Ok(HttpResponse::Ok().finish())
 }

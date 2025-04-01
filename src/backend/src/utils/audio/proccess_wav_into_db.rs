@@ -6,22 +6,20 @@ use super::{
 };
 use crate::{
     error::Error,
-    utils::db::{
-        register_song_to_db::register_song_to_db,
-        store_fingerprints_to_db::store_fingerprints_to_db,
+    utils::{
+        db::{
+            register_song_to_db::register_song_to_db,
+            store_fingerprints_to_db::store_fingerprints_to_db,
+        },
+        youtube::get_youtube_info::YtInfo,
     },
 };
 
-pub async fn proccess_wav_into_db(
-    wav: &Wav,
-    song_title: String,
-    song_artist: String,
-    yt_id: String,
-) -> Result<(), Error> {
+pub async fn proccess_wav_into_db(wav: &Wav, yt_info: &YtInfo) -> Result<(), Error> {
     let samples = sample_wav_audio(wav)?;
     let spectro = create_spectrogram_from_samples(samples, wav).await?;
 
-    let song_id = register_song_to_db(song_title, song_artist, yt_id).await?;
+    let song_id = register_song_to_db(yt_info).await?;
 
     let peaks = extract_peaks_from_spectrogram(spectro, wav);
     let fingerprints = create_fingerprints_from_peaks(peaks, song_id);

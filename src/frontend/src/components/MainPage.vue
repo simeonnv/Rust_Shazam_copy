@@ -9,6 +9,9 @@
         </button>
         <audio controls :src="audioSrc" v-if="audioSrc"></audio>
         <div v-if="error">{{ error.message }}</div>
+
+        <input v-model="url" placeholder="Enter song URL" />
+        <button @click="addNewSong">Add Song</button>
     </div>
 </template>
 
@@ -25,6 +28,7 @@ export default {
         const recordedChunks = ref([]);
         const audioBlob = ref(null);
         const error = ref(null);
+        const url = ref(""); // Reactive URL input
         let stream = null;
 
         onMounted(async () => {
@@ -84,27 +88,49 @@ export default {
             }
         };
 
+        const addNewSong = async () => {
+            if (!url.value) {
+                error.value = new Error("Please enter a URL");
+                return;
+            }
+
+            try {
+                const response = await fetch("http://localhost:8080/songs", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json", // Assuming backend expects JSON
+                    },
+                    body: JSON.stringify({ url: url.value }), // Stringify the payload
+                });
+
+                if (response.ok) {
+                    console.log("New Song added successfully");
+                    url.value = ""; // Clear the input after success
+                } else {
+                    error.value = new Error("Failed to add song");
+                }
+            } catch (err) {
+                error.value = err;
+            }
+        };
+
         const sendToBackend = async () => {
             if (!audioBlob.value) return;
 
-            const formData = new FormData();
-            console.log(audioBlob.value);
             try {
-                const response = await fetch("http://localhost:8080", {
+                const response = await fetch("http://localhost:8080/songs", {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "audio/wav", // Set the correct MIME type
-                    },
-                    body: audioBlob.value,
+                    body: audioBlob.value, // Send the raw Blob
                 });
 
                 if (response.ok) {
                     console.log("Audio uploaded successfully");
+                    audioBlob.value = null; // Clear the blob after success
                 } else {
-                    console.error("Upload failed");
+                    error.value = new Error("Upload failed");
                 }
             } catch (err) {
-                console.error("Error uploading audio:", err);
+                error.value = err;
             }
         };
 
@@ -125,11 +151,13 @@ export default {
             startRecording,
             stopRecording,
             sendToBackend,
+            addNewSong, // Add this to the return object
             isRecording,
             audioBlob,
             audioSrc,
             error,
             isSupported,
+            url, // Return the url ref for v-model binding
         };
     },
 };
@@ -141,5 +169,8 @@ button {
 }
 audio {
     margin-top: 10px;
+}
+input {
+    margin: 5px;
 }
 </style>

@@ -38,7 +38,7 @@ async fn main() -> std::io::Result<()> {
                     .url("/api-docs/openapi.json", api_docs::ApiDoc::openapi()),
             )
     })
-    .bind(("127.0.0.1", 8888))?
+    .bind(("127.0.0.1", 8080))?
     .run()
     .await
 }

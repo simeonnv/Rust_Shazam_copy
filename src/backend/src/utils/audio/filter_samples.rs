@@ -1,5 +1,6 @@
-use super::convert_yt_audio_to_wav::Wav;
 use std::f64::consts::PI;
+
+use super::convert_yt_audio_to_wav::Wav;
 
 pub fn filter_samples(cut_off_freq: f64, wav: &Wav, samples: Vec<f64>) -> Vec<f64> {
     let rc = 1.0 / (2.0 * PI * cut_off_freq);
