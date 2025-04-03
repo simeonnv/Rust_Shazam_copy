@@ -27,10 +27,8 @@ sqlx = { version = "0.8.3", features = [
 utoipa = { version = "5.2.0", features = ["chrono"] }
 utoipa-swagger-ui = { version = "9.0.0", features = ["actix-web", "vendored"] }
 infer = "0.19.0"
-rusty_ytdl = "0.7.4"
+rusty_ytdl = { git = "https://github.com/Mithronn/rusty_ytdl" }
 symphonia = "0.5.4"
 hound = "3.5.1"
 num-complex = "0.4.6"
 rug = "1.27.0"
-yt-dlp = "1.2.0"
-tempfile = "3.19.1"
