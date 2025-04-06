@@ -1,4 +1,3 @@
-pub mod convert_yt_audio_to_wav;
 pub mod create_fingerprints_from_peaks;
 pub mod create_spectrogram_from_samples;
 pub mod extract_peaks_from_spectrogram;

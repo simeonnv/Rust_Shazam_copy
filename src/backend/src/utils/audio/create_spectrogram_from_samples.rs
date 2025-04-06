@@ -1,8 +1,8 @@
 use super::{
-    convert_yt_audio_to_wav::Wav, fast_fourier_transform::fast_fourier_transform,
-    filter_samples::filter_samples, reduce_audio_sample_rate::reduce_audio_sample_rate,
+    fast_fourier_transform::fast_fourier_transform, filter_samples::filter_samples,
+    reduce_audio_sample_rate::reduce_audio_sample_rate,
 };
-use crate::error::Error;
+use crate::{error::Error, utils::youtube::get_youtube_audio_wav::Wav};
 use num_complex::Complex;
 const DSP_RATIO: usize = 4;
 const FREQ_BIN_SIZE: usize = 1024;

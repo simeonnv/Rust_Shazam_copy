@@ -1,5 +1,5 @@
 use super::{
-    convert_yt_audio_to_wav::Wav, create_fingerprints_from_peaks::create_fingerprints_from_peaks,
+    create_fingerprints_from_peaks::create_fingerprints_from_peaks,
     create_spectrogram_from_samples::create_spectrogram_from_samples,
     extract_peaks_from_spectrogram::extract_peaks_from_spectrogram,
     sample_wav_audio::sample_wav_audio,
@@ -11,7 +11,7 @@ use crate::{
             register_song_to_db::register_song_to_db,
             store_fingerprints_to_db::store_fingerprints_to_db,
         },
-        youtube::get_youtube_info::YtInfo,
+        youtube::{get_youtube_audio_wav::Wav, get_youtube_info::YtInfo},
     },
 };
 

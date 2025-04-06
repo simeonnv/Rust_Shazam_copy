@@ -1,6 +1,4 @@
-use crate::error::Error;
-
-use super::convert_yt_audio_to_wav::Wav;
+use crate::{error::Error, utils::youtube::get_youtube_audio_wav::Wav};
 
 pub fn sample_wav_audio(wav_bytes: &Wav) -> Result<Vec<f64>, Error> {
     let wav_bytes = &wav_bytes.raw_bytes;

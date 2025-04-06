@@ -1,6 +1,5 @@
+use crate::utils::youtube::get_youtube_audio_wav::Wav;
 use num_complex::Complex;
-
-use super::convert_yt_audio_to_wav::Wav;
 
 #[derive(Debug)]
 pub struct Peak {
